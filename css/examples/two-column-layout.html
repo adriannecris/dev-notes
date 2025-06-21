@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Column Layout Examples</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f8f9fa;
+      padding: 1rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      color: #2c3e50;
+      margin: 2rem 0;
+      font-size: 2rem;
+    }
+
+    .demo-info {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    /* Equal Columns Layout */
+    .two-column-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      min-height: 50vh;
+      margin-bottom: 3rem;
+    }
+
+    .column {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .column h2 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .column p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    /* Content + Sidebar Layout */
+    .content-sidebar {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .main-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .main-content h1 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .main-content p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+
+    .sidebar h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: #ecf0f1;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .sidebar-item:hover {
+      background: #d5dbdb;
+    }
+
+    .sidebar-item a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    .stats-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-buttons {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .toggle-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 0.5rem;
+      transition: background 0.3s;
+    }
+
+    .toggle-btn:hover {
+      background: #2980b9;
+    }
+
+    .toggle-btn.active {
+      background: #2c3e50;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .two-column-equal,
+      .content-sidebar {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 0.5rem;
+      }
+      
+      body {
+        padding: 0.5rem;
+      }
+    }
+
+    .highlight-box {
+      background: #e8f4fd;
+      padding: 1rem;
+      border-left: 4px solid #3498db;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="section-title">Two Column Layout Examples</h1>
+    
+    <div class="demo-info">
+      <h2>Layout Variations</h2>
+      <p>This page demonstrates two common two-column layout patterns using CSS Grid.</p>
+      <div class="highlight-box">
+        <strong>Try it:</strong> Resize your browser window to see how the layouts adapt to different screen sizes!
+      </div>
+    </div>
+
+    <div class="toggle-buttons">
+      <button class="toggle-btn active" onclick="showLayout('equal')">Equal Columns (50/50)</button>
+      <button class="toggle-btn" onclick="showLayout('content-sidebar')">Content + Sidebar (70/30)</button>
+    </div>
+
+    <!-- Equal Columns Layout -->
+    <div id="equalLayout" class="layout-section">
+      <h2 class="section-title">Equal Columns Layout (1fr 1fr)</h2>
+      
+      <div class="two-column-equal">
+        <div class="column">
+          <h2>Left Column</h2>
+          <p>This is the left column content. It takes up exactly half of the available space on desktop screens.</p>
+          <p>Equal column layouts are perfect for:</p>
+          <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Comparing two items side by side</li>
+            <li>Before/after content</li>
+            <li>Feature comparisons</li>
+            <li>Team member profiles</li>
+          </ul>
+          <p>On mobile devices, this column will stack above the right column for better readability.</p>
+        </div>
+        <div class="column">
+          <h2>Right Column</h2>
+          <p>This is the right column content. It also takes up exactly half of the available space.</p>
+          <p>The CSS Grid property <code>grid-template-columns: 1fr 1fr</code> creates two equal columns that automatically adjust to the container width.</p>
+          <p>Key benefits:</p>
+          <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>✅ Automatic equal sizing</li>
+            <li>✅ Responsive behavior</li>
+            <li>✅ Clean visual balance</li>
+            <li>✅ Easy to implement</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content + Sidebar Layout -->
+    <div id="contentSidebarLayout" class="layout-section" style="display: none;">
+      <h2 class="section-title">Content + Sidebar Layout (2fr 1fr)</h2>
+      
+      <div class="content-sidebar">
+        <main class="main-content">
+          <h1>Main Article Content</h1>
+          <p>This is the main content area that takes up about 67% (2/3) of the available space. It's perfect for blog posts, articles, or any primary content.</p>
+          <p>This layout uses <code>grid-template-columns: 2fr 1fr</code> which creates a 2:1 ratio between the main content and sidebar.</p>
+          
+          <h3>When to Use This Layout:</h3>
+          <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Blog posts with sidebar widgets</li>
+            <li>Product pages with related items</li>
+            <li>Articles with table of contents</li>
+            <li>News sites with advertisement space</li>
+          </ul>
+          
+          <p>The layout automatically adapts to different screen sizes, stacking the sidebar below the content on mobile devices for optimal readability.</p>
+          
+          <h3>CSS Grid Benefits:</h3>
+          <p>Using CSS Grid for this layout provides several advantages over traditional float or flexbox approaches:</p>
+          <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Precise control over column ratios</li>
+            <li>Built-in gap control</li>
+            <li>Easy responsive behavior</li>
+            <li>No clearfix hacks needed</li>
+          </ul>
+        </main>
+        
+        <aside class="sidebar">
+          <h3>Related Links</h3>
+          <div class="sidebar-item">
+            <a href="#link1">CSS Grid Complete Guide</a>
+          </div>
+          <div class="sidebar-item">
+            <a href="#link2">Responsive Design Patterns</a>
+          </div>
+          <div class="sidebar-item">
+            <a href="#link3">Modern Layout Techniques</a>
+          </div>
+          <div class="sidebar-item">
+            <a href="#link4">Flexbox vs Grid</a>
+          </div>
+          
+          <h3 style="margin-top: 2rem;">Quick Stats</h3>
+          <div class="sidebar-item stats-item">
+            <span>Page Views:</span>
+            <strong>1,234</strong>
+          </div>
+          <div class="sidebar-item stats-item">
+            <span>Shares:</span>
+            <strong>56</strong>
+          </div>
+          <div class="sidebar-item stats-item">
+            <span>Comments:</span>
+            <strong>12</strong>
+          </div>
+          <div class="sidebar-item stats-item">
+            <span>Read Time:</span>
+            <strong>5 min</strong>
+          </div>
+
+          <h3 style="margin-top: 2rem;">Newsletter</h3>
+          <div style="padding: 1rem; background: #f8f9fa; border-radius: 4px; margin-top: 0.5rem;">
+            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Stay updated with the latest CSS tips and tricks!</p>
+            <input type="email" placeholder="Enter your email" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 0.5rem;">
+            <button style="width: 100%; padding: 0.5rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Subscribe</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 2rem;">
+      <h3>Layout Comparison</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr style="background: #f8f9fa;">
+            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Layout Type</th>
+            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">CSS Grid Property</th>
+            <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Best Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">Equal Columns</td>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;"><code>grid-template-columns: 1fr 1fr</code></td>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">Comparisons, portfolios, team pages</td>
+          </tr>
+          <tr>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">Content + Sidebar</td>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;"><code>grid-template-columns: 2fr 1fr</code></td>
+            <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">Blogs, articles, product pages</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function showLayout(layoutType) {
+      // Hide all layouts
+      document.getElementById('equalLayout').style.display = 'none';
+      document.getElementById('contentSidebarLayout').style.display = 'none';
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected layout and activate button
+      if (layoutType === 'equal') {
+        document.getElementById('equalLayout').style.display = 'block';
+        event.target.classList.add('active');
+      } else if (layoutType === 'content-sidebar') {
+        document.getElementById('contentSidebarLayout').style.display = 'block';
+        event.target.classList.add('active');
+      }
+    }
+
+    // Handle responsive behavior notification
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        if (window.innerWidth <= 768) {
+          console.log('Mobile layout activated');
+        } else {
+          console.log('Desktop layout activated');
+        }
+      }, 250);
+    });
+  </script>
+</body>
+</html>

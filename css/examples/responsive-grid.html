@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Grid Layout Example</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f8f9fa;
+      padding: 1rem;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Mobile base styles */
+    .responsive-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .card h3 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    /* Tablet: 2 columns */
+    @media (min-width: 768px) {
+      .responsive-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .container {
+        padding: 2rem;
+      }
+    }
+
+    /* Desktop: 3 columns */
+    @media (min-width: 1024px) {
+      .responsive-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .container {
+        padding: 3rem;
+      }
+    }
+
+    /* Auto-fit approach for comparison */
+    .auto-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .demo-controls {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .demo-controls button {
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .demo-controls button:hover {
+      background: #2980b9;
+    }
+
+    .demo-controls button.active {
+      background: #2c3e50;
+    }
+
+    .viewport-indicator {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #2c3e50;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+
+    .layout-info {
+      background: #e8f4fd;
+      padding: 1rem;
+      border-left: 4px solid #3498db;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c, #f39c12);
+    }
+
+    .code-example {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .comparison-table th {
+      background: #3498db;
+      color: white;
+    }
+
+    .comparison-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    .grid-demo {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin: 2rem 0;
+    }
+
+    .grid-toggle {
+      margin-bottom: 2rem;
+    }
+
+    .grid-option {
+      display: none;
+    }
+
+    .grid-option.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-indicator" id="viewportIndicator">
+    📱 Mobile View
+  </div>
+
+  <div class="container">
+    <h1 class="section-title">📱💻 Responsive Grid Layout</h1>
+    
+    <div class="demo-controls">
+      <h2>Interactive Layout Demo</h2>
+      <p><strong>Resize your browser window to see the responsive behavior!</strong></p>
+      <div class="layout-info">
+        <strong>Current Layout:</strong> 
+        <span id="currentLayout">Mobile: 1 column</span>
+      </div>
+      <div style="margin-top: 1rem;">
+        <button class="active" onclick="switchGrid('responsive')">Media Query Grid</button>
+        <button onclick="switchGrid('auto')">Auto-Fit Grid</button>
+        <button onclick="switchGrid('comparison')">Comparison View</button>
+      </div>
+    </div>
+
+    <!-- Responsive Grid (Media Queries) -->
+    <div id="responsiveGrid" class="grid-option active">
+      <div class="grid-demo">
+        <h3>📐 Media Query Based Grid</h3>
+        <p>This grid uses media queries to define exact breakpoints:</p>
+        <div class="code-example">
+/* Mobile First Approach */
+.responsive-grid {
+  grid-template-columns: 1fr; /* 1 column */
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  }
+}
+        </div>
+      </div>
+
+      <div class="responsive-grid">
+        <div class="card feature-card">
+          <h3>🎨 Design Flexibility</h3>
+          <p>Mobile-first responsive design ensures optimal viewing experience across all devices. The layout adapts seamlessly to different screen sizes.</p>
+          <ul style="padding-left: 1.5rem;">
+            <li>Mobile: Single column for easy reading</li>
+            <li>Tablet: Two columns for better use of space</li>
+            <li>Desktop: Three columns for maximum efficiency</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <h3>⚡ Performance</h3>
+          <p>CSS Grid provides efficient layouts with minimal code. The browser handles the responsive behavior automatically based on our media queries.</p>
+          <p><strong>Benefits:</strong></p>
+          <ul style="padding-left: 1.5rem;">
+            <li>Native browser support</li>
+            <li>Hardware acceleration</li>
+            <li>Minimal JavaScript required</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <h3>📱 Mobile Ready</h3>
+          <p>Single column layout on mobile devices ensures content remains readable and accessible on smaller screens.</p>
+          <p>Key mobile optimizations:</p>
+          <ul style="padding-left: 1.5rem;">
+            <li>Touch-friendly spacing</li>
+            <li>Readable font sizes</li>
+            <li>Optimized loading</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <h3>💻 Desktop Optimized</h3>
+          <p>Three-column layout on desktop makes efficient use of larger screens while maintaining good readability.</p>
+          <p>Desktop advantages:</p>
+          <ul style="padding-left: 1.5rem;">
+            <li>More content visible at once</li>
+            <li>Better information density</li>
+            <li>Enhanced user experience</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <h3>🔧 Customizable</h3>
+          <p>The grid system is easily customizable. You can change breakpoints, column counts, and gaps to match your design needs.</p>
+          <p>Customization options:</p>
+          <ul style="padding-left: 1.5rem;">
+            <li>Adjustable breakpoints</li>
+            <li>Variable column counts</li>
+            <li>Flexible gap sizing</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <h3>🎯 Use Cases</h3>
+          <p>This layout pattern works perfectly for product grids, blog posts, portfolios, team pages, and many other use cases.</p>
+          <p>Perfect for:</p>
+          <ul style="padding-left: 1.5rem;">
+            <li>E-commerce product listings</li>
+            <li>Portfolio galleries</li>
+            <li>Blog post previews</li>
+            <li>Team member cards</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto-Fit Grid -->
+    <div id="autoGrid" class="grid-option">
+      <div class="grid-demo">
+        <h3>🔄 Auto-Fit Grid (No Media Queries)</h3>
+        <p>This grid automatically fits as many columns as possible based on minimum width:</p>
+        <div class="code-example">
+.auto-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* No media queries needed! */
+/* Browser automatically calculates columns */
+        </div>
+      </div>
+
+      <div class="auto-grid">
+        <div class="card">
+          <h3>🔄 Auto-Responsive</h3>
+          <p>Uses <code>repeat(auto-fit, minmax(300px, 1fr))</code> to automatically determine column count based on available space.</p>
+          <p>The browser calculates how many 300px+ columns can fit and creates them automatically.</p>
+        </div>
+        <div class="card">
+          <h3>📏 Minimum Width</h3>
+          <p>Each column has a minimum width of 300px, ensuring content remains readable at all screen sizes.</p>
+          <p>When space is limited, columns stack vertically. When there's more space, more columns appear.</p>
+        </div>
+        <div class="card">
+          <h3>🎛️ No Media Queries</h3>
+          <p>This approach doesn't need media queries - the grid responds automatically to container width changes.</p>
+          <p>Simpler CSS, fewer breakpoints to manage, and more fluid responsive behavior.</p>
+        </div>
+        <div class="card">
+          <h3>📐 Mathematical Layout</h3>
+          <p>The browser uses mathematical calculations to determine the optimal number of columns.</p>
+          <p>Formula: <code>container_width / min_column_width = number_of_columns</code></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison View -->
+    <div id="comparisonGrid" class="grid-option">
+      <div class="grid-demo">
+        <h3>⚖️ Approach Comparison</h3>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Media Query Grid</th>
+              <th>Auto-Fit Grid</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Control Level</strong></td>
+              <td>High - Exact breakpoints</td>
+              <td>Medium - Min/max constraints</td>
+            </tr>
+            <tr>
+              <td><strong>CSS Complexity</strong></td>
+              <td>More code, multiple breakpoints</td>
+              <td>Less code, single rule</td>
+            </tr>
+            <tr>
+              <td><strong>Responsive Behavior</strong></td>
+              <td>Stepped (jumps at breakpoints)</td>
+              <td>Fluid (continuous adaptation)</td>
+            </tr>
+            <tr>
+              <td><strong>Browser Support</strong></td>
+              <td>Excellent (IE11+)</td>
+              <td>Good (modern browsers)</td>
+            </tr>
+            <tr>
+              <td><strong>Design Predictability</strong></td>
+              <td>High - Known breakpoints</td>
+              <td>Lower - Variable breakpoints</td>
+            </tr>
+            <tr>
+              <td><strong>Best Use Case</strong></td>
+              <td>Custom designs, specific layouts</td>
+              <td>Content-driven, flexible layouts</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="layout-info">
+          <strong>💡 Pro Tip:</strong> You can combine both approaches! Use media queries for major layout changes and auto-fit for flexible content grids.
+        </div>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem;">When to Choose Each Approach:</h4>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1rem 0;">
+          <div style="padding: 1.5rem; background: #e8f4fd; border-radius: 8px;">
+            <h5 style="color: #3498db; margin-bottom: 1rem;">📐 Choose Media Query Grid When:</h5>
+            <ul style="padding-left: 1.5rem; line-height: 1.6;">
+              <li>You need precise control over layout at specific screen sizes</li>
+              <li>Design requires different layouts for mobile/tablet/desktop</li>
+              <li>Working with a design system with defined breakpoints</li>
+              <li>Need to support older browsers</li>
+            </ul>
+          </div>
+          
+          <div style="padding: 1.5rem; background: #e8f6f3; border-radius: 8px;">
+            <h5 style="color: #2ecc71; margin-bottom: 1rem;">🔄 Choose Auto-Fit Grid When:</h5>
+            <ul style="padding-left: 1.5rem; line-height: 1.6;">
+              <li>Content is uniform and benefits from flexible columns</li>
+              <li>You want minimal CSS and maintenance</li>
+              <li>Layout should adapt fluidly to any screen size</li>
+              <li>Working with content management systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 2rem; text-align: center;">
+      <h3>🔬 Test the Responsiveness</h3>
+      <p>Try these actions to see how the layouts respond:</p>
+      <div style="margin: 1rem 0;">
+        <button class="demo-controls button" onclick="simulateResize(480)">📱 Mobile (480px)</button>
+        <button class="demo-controls button" onclick="simulateResize(768)">📟 Tablet (768px)</button>
+        <button class="demo-controls button" onclick="simulateResize(1024)">💻 Desktop (1024px)</button>
+        <button class="demo-controls button" onclick="simulateResize(1200)">🖥️ Large (1200px)</button>
+      </div>
+      <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+        Or manually resize your browser window to see real-time responsive behavior!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Track viewport changes
+    function updateViewportIndicator() {
+      const width = window.innerWidth;
+      const indicator = document.getElementById('viewportIndicator');
+      const layoutSpan = document.getElementById('currentLayout');
+      
+      let layout, columns;
+      
+      if (width < 768) {
+        layout = '📱 Mobile View';
+        columns = 'Mobile: 1 column';
+      } else if (width < 1024) {
+        layout = '📟 Tablet View';
+        columns = 'Tablet: 2 columns';
+      } else {
+        layout = '💻 Desktop View';
+        columns = 'Desktop: 3 columns';
+      }
+      
+      indicator.textContent = layout;
+      layoutSpan.textContent = columns;
+    }
+
+    // Grid switching functionality
+    function switchGrid(type) {
+      // Hide all grids
+      document.querySelectorAll('.grid-option').forEach(grid => {
+        grid.classList.remove('active');
+      });
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.demo-controls button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected grid and activate button
+      if (type === 'responsive') {
+        document.getElementById('responsiveGrid').classList.add('active');
+        event.target.classList.add('active');
+      } else if (type === 'auto') {
+        document.getElementById('autoGrid').classList.add('active');
+        event.target.classList.add('active');
+      } else if (type === 'comparison') {
+        document.getElementById('comparisonGrid').classList.add('active');
+        event.target.classList.add('active');
+      }
+    }
+
+    // Simulate different screen sizes (for demo purposes)
+    function simulateResize(width) {
+      // This is just for demonstration - we can't actually resize the window
+      // But we can show what would happen at different widths
+      const layouts = {
+        480: { view: '📱 Mobile View', columns: 'Mobile: 1 column' },
+        768: { view: '📟 Tablet View', columns: 'Tablet: 2 columns' },
+        1024: { view: '💻 Desktop View', columns: 'Desktop: 3 columns' },
+        1200: { view: '🖥️ Large Desktop View', columns: 'Desktop: 3 columns (wider)' }
+      };
+      
+      const layout = layouts[width];
+      document.getElementById('viewportIndicator').textContent = layout.view;
+      document.getElementById('currentLayout').textContent = layout.columns;
+      
+      // Show notification
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 60px;
+        right: 10px;
+        background: #2c3e50;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        z-index: 1001;
+        animation: slideIn 0.3s ease;
+      `;
+      notification.textContent = `Simulating ${width}px width`;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 2000);
+    }
+
+    // Initialize and add event listeners
+    window.addEventListener('resize', updateViewportIndicator);
+    window.addEventListener('load', updateViewportIndicator);
+
+    // Add slide in animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Log layout changes for educational purposes
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        const width = window.innerWidth;
+        console.log(`🔄 Layout changed - Window width: ${width}px`);
+        
+        if (width < 768) {
+          console.log('📱 Mobile layout: Single column grid');
+        } else if (width < 1024) {
+          console.log('📟 Tablet layout: Two column grid');
+        } else {
+          console.log('💻 Desktop layout: Three column grid');
+        }
+      }, 250);
+    });
+  </script>
+</body>
+</html>

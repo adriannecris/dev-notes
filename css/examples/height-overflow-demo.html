@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Height and Overflow Examples</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f8f9fa;
+      padding: 1rem;
+    }
+    
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .demo-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .demo-header {
+      background: #3498db;
+      color: white;
+      padding: 1rem;
+      font-weight: bold;
+    }
+    
+    .demo-content {
+      padding: 1rem;
+    }
+    
+    /* Fixed Height Example */
+    .fixed-height {
+      height: 200px;
+      background: #e8f4fd;
+      border: 2px solid #3498db;
+      padding: 1rem;
+      overflow: hidden; /* Content will be cut off */
+      position: relative;
+    }
+    
+    .fixed-height::after {
+      content: "height: 200px";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #3498db;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 3px;
+    }
+    
+    /* Min-Height Example */
+    .min-height {
+      min-height: 200px;
+      background: #e8f6f3;
+      border: 2px solid #2ecc71;
+      padding: 1rem;
+      position: relative;
+    }
+    
+    .min-height::after {
+      content: "min-height: 200px";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #2ecc71;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 3px;
+    }
+    
+    /* Max-Height with Scroll */
+    .max-height-scroll {
+      max-height: 200px;
+      background: #fdf2e9;
+      border: 2px solid #e67e22;
+      padding: 1rem;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .max-height-scroll::after {
+      content: "max-height: 200px";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #e67e22;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 3px;
+    }
+    
+    /* Full Height Layout */
+    .full-height-demo {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid #9b59b6;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .demo-header-fixed {
+      background: #9b59b6;
+      color: white;
+      padding: 1rem;
+      flex-shrink: 0;
+    }
+    
+    .demo-scrollable {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #f4ecf7;
+    }
+    
+    .demo-footer-fixed {
+      background: #8e44ad;
+      color: white;
+      padding: 0.5rem 1rem;
+      flex-shrink: 0;
+    }
+    
+    /* Custom Scrollbar */
+    .custom-scroll {
+      overflow-y: auto;
+      height: 200px;
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 1rem;
+      position: relative;
+    }
+    
+    .custom-scroll::after {
+      content: "custom scrollbar";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #ffc107;
+      color: #333;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 3px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar {
+      width: 12px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 6px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #ffc107;
+      border-radius: 6px;
+    }
+    
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #e0a800;
+    }
+    
+    .long-content {
+      line-height: 1.6;
+    }
+    
+    .section-title {
+      text-align: center;
+      color: #2c3e50;
+      margin: 2rem 0;
+      font-size: 2rem;
+    }
+    
+    .modal-demo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 500px;
+      max-height: 90vh;
+      width: 90%;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .demo-button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background 0.3s;
+    }
+    
+    .demo-button:hover {
+      background: #2980b9;
+    }
+
+    .intro-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .highlight-box {
+      background: #e8f4fd;
+      padding: 1rem;
+      border-left: 4px solid #3498db;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .comparison-table th {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .comparison-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    .demo-controls {
+      text-align: center;
+      margin: 2rem 0;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .content-generator {
+      margin: 1rem 0;
+    }
+
+    .content-generator button {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .content-generator button:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1 class="section-title">📏 Height, Min-Height & Overflow Examples</h1>
+    
+    <div class="intro-card">
+      <h2>Interactive Height & Overflow Demo</h2>
+      <p>This page demonstrates different height properties and how they handle content overflow.</p>
+      <div class="highlight-box">
+        <strong>💡 Try it:</strong> Use the content generators below each example to see how different height properties respond to varying content lengths!
+      </div>
+    </div>
+
+    <div class="demo-controls">
+      <h3>🎛️ Global Controls</h3>
+      <button class="demo-button" onclick="addContentToAll()">➕ Add Content to All</button>
+      <button class="demo-button" onclick="removeContentFromAll()">➖ Remove Content from All</button>
+      <button class="demo-button" onclick="resetAllContent()">🔄 Reset All</button>
+      <button class="demo-button" onclick="openModal()">📝 Open Modal Demo</button>
+    </div>
+    
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-header">Fixed Height (height: 200px)</div>
+        <div class="demo-content">
+          <div class="fixed-height" id="fixedHeightDemo">
+            <div class="long-content">
+              This container has a fixed height of 200px. If the content is longer than the container, it will be cut off because overflow is set to hidden. This is useful when you need exact dimensions.
+            </div>
+          </div>
+          <div class="content-generator">
+            <button onclick="addContent('fixedHeightDemo')">Add Content</button>
+            <button onclick="removeContent('fixedHeightDemo')">Remove Content</button>
+          </div>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+            <strong>Use case:</strong> Image containers, fixed-size components, exact layouts
+          </p>
+        </div>
+      </div>
+      
+      <div class="demo-card">
+        <div class="demo-header">Min-Height (min-height: 200px)</div>
+        <div class="demo-content">
+          <div class="min-height" id="minHeightDemo">
+            <div class="long-content">
+              This container has a minimum height of 200px but will grow to accommodate content. Perfect for responsive designs where content length varies.
+            </div>
+          </div>
+          <div class="content-generator">
+            <button onclick="addContent('minHeightDemo')">Add Content</button>
+            <button onclick="removeContent('minHeightDemo')">Remove Content</button>
+          </div>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+            <strong>Use case:</strong> Cards, articles, flexible containers
+          </p>
+        </div>
+      </div>
+      
+      <div class="demo-card">
+        <div class="demo-header">Max-Height with Scroll</div>
+        <div class="demo-content">
+          <div class="max-height-scroll" id="maxHeightDemo">
+            <div class="long-content">
+              This container has max-height: 200px with overflow-y: auto. It will scroll when content exceeds the maximum height. This is perfect for creating scrollable regions like chat windows, comment sections, or any area where you want to limit height but allow access to all content.
+            </div>
+          </div>
+          <div class="content-generator">
+            <button onclick="addContent('maxHeightDemo')">Add Content</button>
+            <button onclick="removeContent('maxHeightDemo')">Remove Content</button>
+          </div>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+            <strong>Use case:</strong> Chat windows, notifications, dropdown menus
+          </p>
+        </div>
+      </div>
+      
+      <div class="demo-card">
+        <div class="demo-header">Custom Scrollbar</div>
+        <div class="demo-content">
+          <div class="custom-scroll" id="customScrollDemo">
+            <div class="long-content">
+              This container demonstrates custom scrollbar styling using webkit pseudo-elements. The scrollbar has a custom color and rounded corners to match the design theme. Notice how the scrollbar thumb changes color on hover, providing nice visual feedback.
+            </div>
+          </div>
+          <div class="content-generator">
+            <button onclick="addContent('customScrollDemo')">Add Content</button>
+            <button onclick="removeContent('customScrollDemo')">Remove Content</button>
+          </div>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+            <strong>Use case:</strong> Branded interfaces, custom themes, design systems
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">Full-Height Layout with Independent Scrolling</h2>
+    
+    <div class="full-height-demo">
+      <div class="demo-header-fixed">Fixed Header (flex-shrink: 0)</div>
+      <div class="demo-scrollable" id="fullHeightScrollDemo">
+        <div class="long-content">
+          <p><strong>This is the scrollable main content area.</strong></p>
+          <p>The header and footer remain fixed while only this section scrolls. This is achieved using flexbox with flex: 1 on the main content.</p>
+          <p>This pattern is commonly used in dashboards, email clients, and chat applications where you need persistent navigation and a scrollable content area.</p>
+          <p>Scroll down to see more content...</p>
+        </div>
+      </div>
+      <div class="demo-footer-fixed">Fixed Footer (flex-shrink: 0)</div>
+    </div>
+
+    <div class="content-generator" style="text-align: center; margin: 1rem 0;">
+      <button onclick="addContent('fullHeightScrollDemo')">Add Content to Scrollable Area</button>
+      <button onclick="removeContent('fullHeightScrollDemo')">Remove Content</button>
+    </div>
+
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: 2rem 0;">
+      <h3>📊 Height Properties Comparison</h3>
+      
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Behavior</th>
+            <th>Content Overflow</th>
+            <th>Best Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>height: 200px</code></td>
+            <td>Fixed at exactly 200px</td>
+            <td>Hidden or clipped</td>
+            <td>Image containers, fixed layouts</td>
+          </tr>
+          <tr>
+            <td><code>min-height: 200px</code></td>
+            <td>At least 200px, grows with content</td>
+            <td>Container expands</td>
+            <td>Cards, articles, flexible containers</td>
+          </tr>
+          <tr>
+            <td><code>max-height: 200px</code></td>
+            <td>Maximum 200px, shrinks if less content</td>
+            <td>Scrollable with overflow: auto</td>
+            <td>Dropdowns, modals, notifications</td>
+          </tr>
+          <tr>
+            <td><code>height: 100vh</code></td>
+            <td>Full viewport height</td>
+            <td>Usually scrollable sections inside</td>
+            <td>Dashboards, full-screen apps</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: 2rem 0;">
+      <h3>🔧 Overflow Property Values</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="color: #3498db; margin-bottom: 0.5rem;">overflow: visible</h4>
+          <p style="font-size: 0.9rem;">Content extends outside container (default)</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="color: #3498db; margin-bottom: 0.5rem;">overflow: hidden</h4>
+          <p style="font-size: 0.9rem;">Content is clipped at container edge</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="color: #3498db; margin-bottom: 0.5rem;">overflow: scroll</h4>
+          <p style="font-size: 0.9rem;">Always shows scrollbars</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+          <h4 style="color: #3498db; margin-bottom: 0.5rem;">overflow: auto</h4>
+          <p style="font-size: 0.9rem;">Shows scrollbars only when needed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Demo -->
+  <div id="modalDemo" class="modal-demo">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3>Modal with Overflow Control</h3>
+      <p>This modal demonstrates max-height: 90vh with overflow-y: auto.</p>
+      <div class="long-content" id="modalContent">
+        <p>The modal will scroll if the content is too long for the viewport, preventing it from extending beyond the screen boundaries.</p>
+        <p>This ensures the modal remains accessible and usable on all screen sizes.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <div style="text-align: center; margin-top: 1rem;">
+        <button class="demo-button" onclick="addContent('modalContent')">Add More Content</button>
+        <button class="demo-button" onclick="removeContent('modalContent')">Remove Content</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Content manipulation functions
+    const sampleTexts = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+      "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
+      "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum."
+    ];
+
+    function addContent(elementId) {
+      const element = document.getElementById(elementId);
+      const contentDiv = element.querySelector('.long-content');
+      const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+      
+      const newParagraph = document.createElement('p');
+      newParagraph.textContent = randomText;
+      newParagraph.style.marginTop = '1rem';
+      contentDiv.appendChild(newParagraph);
+      
+      // Add visual feedback
+      newParagraph.style.backgroundColor = '#e8f4fd';
+      newParagraph.style.padding = '0.5rem';
+      newParagraph.style.borderRadius = '4px';
+      newParagraph.style.animation = 'fadeIn 0.5s ease';
+      
+      setTimeout(() => {
+        newParagraph.style.backgroundColor = '';
+        newParagraph.style.padding = '';
+      }, 1000);
+    }
+
+    function removeContent(elementId) {
+      const element = document.getElementById(elementId);
+      const contentDiv = element.querySelector('.long-content');
+      const paragraphs = contentDiv.querySelectorAll('p');
+      
+      if (paragraphs.length > 1) {
+        const lastParagraph = paragraphs[paragraphs.length - 1];
+        lastParagraph.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+          lastParagraph.remove();
+        }, 300);
+      }
+    }
+
+    function addContentToAll() {
+      const demos = ['fixedHeightDemo', 'minHeightDemo', 'maxHeightDemo', 'customScrollDemo', 'fullHeightScrollDemo'];
+      demos.forEach(id => addContent(id));
+    }
+
+    function removeContentFromAll() {
+      const demos = ['fixedHeightDemo', 'minHeightDemo', 'maxHeightDemo', 'customScrollDemo', 'fullHeightScrollDemo'];
+      demos.forEach(id => removeContent(id));
+    }
+
+    function resetAllContent() {
+      const demos = [
+        { id: 'fixedHeightDemo', text: 'This container has a fixed height of 200px. If the content is longer than the container, it will be cut off because overflow is set to hidden. This is useful when you need exact dimensions.' },
+        { id: 'minHeightDemo', text: 'This container has a minimum height of 200px but will grow to accommodate content. Perfect for responsive designs where content length varies.' },
+        { id: 'maxHeightDemo', text: 'This container has max-height: 200px with overflow-y: auto. It will scroll when content exceeds the maximum height. This is perfect for creating scrollable regions like chat windows, comment sections, or any area where you want to limit height but allow access to all content.' },
+        { id: 'customScrollDemo', text: 'This container demonstrates custom scrollbar styling using webkit pseudo-elements. The scrollbar has a custom color and rounded corners to match the design theme. Notice how the scrollbar thumb changes color on hover, providing nice visual feedback.' },
+        { id: 'fullHeightScrollDemo', text: 'This is the scrollable main content area. The header and footer remain fixed while only this section scrolls. This is achieved using flexbox with flex: 1 on the main content. This pattern is commonly used in dashboards, email clients, and chat applications where you need persistent navigation and a scrollable content area. Scroll down to see more content...' }
+      ];
+      
+      demos.forEach(demo => {
+        const element = document.getElementById(demo.id);
+        const contentDiv = element.querySelector('.long-content');
+        contentDiv.innerHTML = `<p><strong>This is the scrollable main content area.</strong></p><p>${demo.text}</p>`;
+      });
+    }
+
+    function openModal() {
+      document.getElementById('modalDemo').style.display = 'flex';
+    }
+    
+    function closeModal() {
+      document.getElementById('modalDemo').style.display = 'none';
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalDemo');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Educational logging
+    function logHeightBehavior(elementId, action) {
+      console.log(`📏 ${action} in ${elementId}:`);
+      
+      const element = document.getElementById(elementId);
+      const styles = window.getComputedStyle(element);
+      
+      console.log(`  - Computed height: ${styles.height}`);
+      console.log(`  - Scroll height: ${element.scrollHeight}px`);
+      console.log(`  - Client height: ${element.clientHeight}px`);
+      console.log(`  - Overflow Y: ${styles.overflowY}`);
+    }
+
+    // Track content changes for educational purposes
+    const originalAddContent = addContent;
+    addContent = function(elementId) {
+      originalAddContent(elementId);
+      logHeightBehavior(elementId, 'Added content');
+    };
+
+    const originalRemoveContent = removeContent;
+    removeContent = function(elementId) {
+      originalRemoveContent(elementId);
+      logHeightBehavior(elementId, 'Removed content');
+    };
+
+    // Initial setup
+    window.addEventListener('load', function() {
+      console.log('📏 Height and Overflow Demo loaded');
+      console.log('💡 Try adding/removing content to see how different height properties respond!');
+    });
+  </script>
+</body>
+</html>

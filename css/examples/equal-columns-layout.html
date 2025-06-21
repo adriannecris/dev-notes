@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Column Layout</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { font-family: Arial, sans-serif; }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      min-height: 100vh;
+      padding: 2rem;
+      background: #f8f9fa;
+    }
+
+    .column {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .column h2 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .column p {
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="two-column">
+    <div class="column">
+      <h2>Left Column</h2>
+      <p>This is the left column content. It takes up exactly half of the available space on desktop screens.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <p>On mobile devices, this column will stack above the right column for better readability.</p>
+    </div>
+    <div class="column">
+      <h2>Right Column</h2>
+      <p>This is the right column content. It also takes up exactly half of the available space.</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>The responsive design ensures optimal viewing experience across all device sizes.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Layout Example</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { font-family: Arial, sans-serif; }
+    
+    .dashboard {
+      display: grid;
+      grid-template-areas:
+        "header header"
+        "sidebar main";
+      grid-template-rows: 60px 1fr;
+      grid-template-columns: 250px 1fr;
+      height: 100vh;
+    }
+
+    .dashboard-header {
+      grid-area: header;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .dashboard-sidebar {
+      grid-area: sidebar;
+      background: #f5f5f5;
+      overflow-y: auto;
+      border-right: 1px solid #e0e0e0;
+    }
+
+    .dashboard-main {
+      grid-area: main;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #fafafa;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 400px;
+      margin: 0 2rem;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+      border-color: #3498db;
+    }
+
+    .search-bar::before {
+      content: "🔍";
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .notifications {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .notifications::after {
+      content: "3";
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3498db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 1rem 0;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: #555;
+      text-decoration: none;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: #3498db;
+      color: white;
+      border-left-color: #2980b9;
+    }
+
+    .sidebar-section {
+      padding: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .sidebar-section h4 {
+      color: #777;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #7f8c8d;
+      font-weight: 500;
+    }
+
+    .stat-change {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .stat-change.positive {
+      color: #27ae60;
+    }
+
+    .stat-change.negative {
+      color: #e74c3c;
+    }
+
+    .chart-placeholder {
+      height: 300px;
+      background: linear-gradient(45deg, #3498db, #2ecc71);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .action-btn {
+      background: white;
+      border: 2px solid #3498db;
+      color: #3498db;
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .action-btn:hover {
+      background: #3498db;
+      color: white;
+    }
+
+    .recent-activity {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ecf0f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-time {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-areas:
+          "header"
+          "main";
+        grid-template-columns: 1fr;
+      }
+      
+      .dashboard-sidebar {
+        display: none;
+      }
+      
+      .search-bar {
+        display: none;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="logo">📊 Dashboard</div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+      </div>
+      <div class="user-info">
+        <div class="notifications">🔔</div>
+        <span>John Doe</span>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+    
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-section">
+        <h4>Main</h4>
+        <nav>
+          <ul class="sidebar-menu">
+            <li><a href="#" class="active">📊 Overview</a></li>
+            <li><a href="#">📈 Analytics</a></li>
+            <li><a href="#">💰 Revenue</a></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="sidebar-section">
+        <h4>Management</h4>
+        <nav>
+          <ul class="sidebar-menu">
+            <li><a href="#">👥 Users</a></li>
+            <li><a href="#">📦 Products</a></li>
+            <li><a href="#">🛒 Orders</a></li>
+            <li><a href="#">📋 Inventory</a></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="sidebar-section">
+        <h4>Tools</h4>
+        <nav>
+          <ul class="sidebar-menu">
+            <li><a href="#">📊 Reports</a></li>
+            <li><a href="#">🎨 Themes</a></li>
+            <li><a href="#">⚙️ Settings</a></li>
+            <li><a href="#">❓ Help</a></li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    
+    <main class="dashboard-main">
+      <h1 style="margin-bottom: 1rem; color: #2c3e50;">Dashboard Overview</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">1,234</div>
+          <div class="stat-label">Total Users</div>
+          <div class="stat-change positive">↗ +12% from last month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">567</div>
+          <div class="stat-label">Active Sessions</div>
+          <div class="stat-change positive">↗ +8% from yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">$89,123</div>
+          <div class="stat-label">Revenue</div>
+          <div class="stat-change negative">↘ -3% from last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">23</div>
+          <div class="stat-label">New Orders</div>
+          <div class="stat-change positive">↗ +15% from yesterday</div>
+        </div>
+      </div>
+      
+      <div class="quick-actions">
+        <button class="action-btn" onclick="alert('Creating new user...')">👤 Add User</button>
+        <button class="action-btn" onclick="alert('Adding new product...')">📦 Add Product</button>
+        <button class="action-btn" onclick="alert('Generating report...')">📊 Generate Report</button>
+        <button class="action-btn" onclick="alert('Opening settings...')">⚙️ Settings</button>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+        <div class="card">
+          <h3 style="margin-bottom: 1rem; color: #2c3e50;">📈 Revenue Trends</h3>
+          <div class="chart-placeholder">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+              <div>Interactive Chart Area</div>
+              <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.8;">Revenue data visualization would go here</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recent-activity">
+          <h3 style="margin-bottom: 1rem; color: #2c3e50;">🕒 Recent Activity</h3>
+          <div class="activity-item">
+            <div class="activity-icon">👤</div>
+            <div class="activity-content">
+              <div>New user registered</div>
+              <div class="activity-time">2 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">💰</div>
+            <div class="activity-content">
+              <div>Payment received</div>
+              <div class="activity-time">5 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">📦</div>
+            <div class="activity-content">
+              <div>Order shipped</div>
+              <div class="activity-time">10 minutes ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">🔔</div>
+            <div class="activity-content">
+              <div>System notification</div>
+              <div class="activity-time">15 minutes ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">💡 Dashboard Features</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+          <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <h4 style="color: #3498db; margin-bottom: 0.5rem;">📊 Real-time Data</h4>
+            <p style="font-size: 0.9rem; color: #555;">Live updates and real-time monitoring of key metrics and KPIs.</p>
+          </div>
+          <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <h4 style="color: #3498db; margin-bottom: 0.5rem;">📱 Responsive Design</h4>
+            <p style="font-size: 0.9rem; color: #555;">Optimized for all devices with mobile-first approach.</p>
+          </div>
+          <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <h4 style="color: #3498db; margin-bottom: 0.5rem;">🔍 Advanced Search</h4>
+            <p style="font-size: 0.9rem; color: #555;">Powerful search functionality across all data sources.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div style="height: 200px; margin-top: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; text-align: center;">
+        <div>
+          <div style="font-size: 1.5rem; margin-bottom: 1rem;">🚀</div>
+          <div style="font-size: 1.2rem;">Scrollable Dashboard Content</div>
+          <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;">This main area scrolls independently from the sidebar</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Handle navigation clicks
+    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove active class from all links
+        document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+        
+        // Add active class to clicked link
+        this.classList.add('active');
+        
+        // Update main content based on selection
+        const section = this.textContent.trim();
+        updateDashboardContent(section);
+      });
+    });
+
+    function updateDashboardContent(section) {
+      const mainTitle = document.querySelector('.dashboard-main h1');
+      
+      // Simple content switching for demo
+      const contentMap = {
+        '📊 Overview': 'Dashboard Overview',
+        '📈 Analytics': 'Analytics Dashboard',
+        '💰 Revenue': 'Revenue Management',
+        '👥 Users': 'User Management',
+        '📦 Products': 'Product Catalog',
+        '🛒 Orders': 'Order Management',
+        '📋 Inventory': 'Inventory Control',
+        '📊 Reports': 'Reports & Insights',
+        '🎨 Themes': 'Theme Settings',
+        '⚙️ Settings': 'Application Settings',
+        '❓ Help': 'Help & Support'
+      };
+      
+      mainTitle.textContent = contentMap[section] || 'Dashboard';
+    }
+
+    // Search functionality demo
+    document.querySelector('.search-bar input').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      if (query.length > 2) {
+        console.log('Searching for:', query);
+        // In a real app, this would trigger search results
+      }
+    });
+
+    // Notification click handler
+    document.querySelector('.notifications').addEventListener('click', function() {
+      alert('📬 You have 3 new notifications:\n\n1. New user registration\n2. Payment received\n3. System update available');
+    });
+
+    // Avatar click handler
+    document.querySelector('.avatar').addEventListener('click', function() {
+      alert('👤 User menu:\n\n• Profile Settings\n• Change Password\n• Logout');
+    });
+
+    // Auto-refresh stats demo (every 30 seconds)
+    setInterval(function() {
+      document.querySelectorAll('.stat-number').forEach(stat => {
+        const currentValue = parseInt(stat.textContent.replace(/[,$]/g, ''));
+        const change = Math.floor(Math.random() * 10) - 5; // Random change -5 to +5
+        let newValue = currentValue + change;
+        
+        if (stat.textContent.includes('$')) {
+          stat.textContent = '$' + newValue.toLocaleString();
+        } else {
+          stat.textContent = newValue.toLocaleString();
+        }
+      });
+      
+      console.log('📊 Dashboard stats updated');
+    }, 30000);
+
+    // Mobile responsiveness notification
+    window.addEventListener('resize', function() {
+      if (window.innerWidth <= 768) {
+        console.log('📱 Mobile dashboard view activated');
+      } else {
+        console.log('💻 Desktop dashboard view activated');
+      }
+    });
+  </script>
+</body>
+</html>

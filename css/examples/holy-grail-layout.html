@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holy Grail Layout Example</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { font-family: Arial, sans-serif; }
+    
+    .holy-grail {
+      display: grid;
+      grid-template-areas:
+        "header header header"
+        "sidebar main aside"
+        "footer footer footer";
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 200px 1fr 200px;
+      min-height: 100vh;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f8f9fa;
+    }
+
+    .header {
+      grid-area: header;
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header nav {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .header nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .header nav a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      background: #34495e;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .main {
+      grid-area: main;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow-y: auto;
+    }
+
+    .aside {
+      grid-area: aside;
+      background: #95a5a6;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .footer {
+      grid-area: footer;
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .nav-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .nav-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-list a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem;
+      display: block;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .nav-list a:hover,
+    .nav-list a.active {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .widget {
+      background: rgba(255,255,255,0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .demo-info {
+      background: #e8f4fd;
+      padding: 1rem;
+      border-left: 4px solid #3498db;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+    }
+
+    .content-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .content-section:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      .holy-grail {
+        grid-template-areas:
+          "header"
+          "main"
+          "sidebar"
+          "aside"
+          "footer";
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
+      
+      .header nav {
+        display: none;
+      }
+    }
+
+    /* Additional styles for better visual presentation */
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #3498db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .stat-card {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #3498db;
+    }
+  </style>
+</head>
+<body>
+  <div class="holy-grail">
+    <header class="header">
+      <div class="logo">🏛️ Holy Grail Layout</div>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="user-info">
+        <span>Welcome, User</span>
+        <div class="avatar">U</div>
+      </div>
+    </header>
+    
+    <aside class="sidebar">
+      <h3>🧭 Navigation</h3>
+      <ul class="nav-list">
+        <li><a href="#dashboard" class="active">📊 Dashboard</a></li>
+        <li><a href="#projects">📁 Projects</a></li>
+        <li><a href="#tasks">✅ Tasks</a></li>
+        <li><a href="#calendar">📅 Calendar</a></li>
+        <li><a href="#reports">📈 Reports</a></li>
+        <li><a href="#settings">⚙️ Settings</a></li>
+      </ul>
+      
+      <div class="widget">
+        <h4>📊 Quick Stats</h4>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Projects: <strong>12</strong></p>
+        <p style="font-size: 0.9rem;">Active: <strong>5</strong></p>
+        <p style="font-size: 0.9rem;">Completed: <strong>7</strong></p>
+      </div>
+    </aside>
+    
+    <main class="main">
+      <h1>The Holy Grail Layout</h1>
+      
+      <div class="demo-info">
+        <strong>🎯 Classic Web Layout Pattern:</strong> The Holy Grail layout has been a sought-after design pattern since the early days of CSS. It provides a header, footer, main content area, and two sidebars that all expand to fill the available space.
+      </div>
+      
+      <div class="content-section">
+        <h2>What Makes It Special?</h2>
+        <p>The Holy Grail layout gets its name from being historically difficult to achieve with older CSS techniques. It required complex float and positioning hacks, often resulting in brittle code.</p>
+        
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div>Layout Areas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div>CSS Properties</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div>Responsive</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="content-section">
+        <h2>CSS Grid Implementation</h2>
+        <p>With CSS Grid, the Holy Grail layout becomes trivial to implement:</p>
+        
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0; font-family: monospace;">
+          <strong>grid-template-areas:</strong><br>
+          &nbsp;&nbsp;"header header header"<br>
+          &nbsp;&nbsp;"sidebar main aside"<br>
+          &nbsp;&nbsp;"footer footer footer";
+        </div>
+        
+        <p>This declarative approach makes the layout intention clear and easy to modify.</p>
+      </div>
+      
+      <div class="content-section">
+        <h2>Key Benefits</h2>
+        <ul style="line-height: 1.8; padding-left: 2rem;">
+          <li><strong>Semantic Structure:</strong> Each area has a clear purpose and role</li>
+          <li><strong>Flexible Content:</strong> Main content area expands to fill available space</li>
+          <li><strong>Responsive Design:</strong> Easy to reorganize for mobile devices</li>
+          <li><strong>Independent Scrolling:</strong> Each area can scroll independently if needed</li>
+          <li><strong>Equal Height Columns:</strong> Sidebars automatically match content height</li>
+        </ul>
+      </div>
+      
+      <div class="content-section">
+        <h2>Common Use Cases</h2>
+        <p>This layout pattern works exceptionally well for:</p>
+        <ul style="line-height: 1.8; padding-left: 2rem;">
+          <li>Dashboard applications</li>
+          <li>Content management systems</li>
+          <li>Blog themes with multiple sidebars</li>
+          <li>Documentation sites</li>
+          <li>E-commerce product pages</li>
+        </ul>
+      </div>
+      
+      <div style="height: 500px; background: linear-gradient(45deg, #3498db, #2ecc71); margin: 2rem 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; text-align: center;">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 1rem;">🎨</div>
+          <div>This main content area is scrollable</div>
+          <div style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.9;">Try scrolling to see the fixed header and footer</div>
+        </div>
+      </div>
+    </main>
+    
+    <aside class="aside">
+      <h3>📰 Latest News</h3>
+      <div class="widget">
+        <h4>CSS Grid Support</h4>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">CSS Grid is now supported in all modern browsers with 95%+ global coverage.</p>
+      </div>
+      
+      <div class="widget">
+        <h4>🔥 Trending</h4>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Container Queries are gaining traction as the next big CSS feature.</p>
+      </div>
+      
+      <div class="widget">
+        <h4>💡 Tip</h4>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Use browser dev tools to visualize grid areas and debug layouts.</p>
+      </div>
+      
+      <div class="widget">
+        <h4>📱 Mobile</h4>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Try resizing this window to see how the layout adapts to mobile screens!</p>
+      </div>
+    </aside>
+    
+    <footer class="footer">
+      <p>&copy; 2025 Holy Grail Layout Demo | Built with CSS Grid | 
+        <a href="#top" style="color: #ecf0f1; margin-left: 1rem;">↑ Back to Top</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Handle navigation clicks
+    document.querySelectorAll('.nav-list a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove active class from all links
+        document.querySelectorAll('.nav-list a').forEach(l => l.classList.remove('active'));
+        
+        // Add active class to clicked link
+        this.classList.add('active');
+        
+        // Update main content (simple demo)
+        const section = this.getAttribute('href').substring(1);
+        updateContent(section);
+      });
+    });
+
+    function updateContent(section) {
+      const sectionNames = {
+        dashboard: 'Dashboard Overview',
+        projects: 'Project Management',
+        tasks: 'Task Tracking',
+        calendar: 'Calendar View',
+        reports: 'Analytics & Reports',
+        settings: 'Application Settings'
+      };
+      
+      const mainTitle = document.querySelector('.main h1');
+      if (sectionNames[section]) {
+        mainTitle.textContent = sectionNames[section];
+      }
+    }
+
+    // Smooth scrolling for "Back to Top" link
+    document.querySelector('a[href="#top"]').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Log layout changes for demo purposes
+    window.addEventListener('resize', () => {
+      const width = window.innerWidth;
+      if (width <= 768) {
+        console.log('📱 Mobile layout: Stacked vertically');
+      } else {
+        console.log('💻 Desktop layout: Holy Grail structure');
+      }
+    });
+  </script>
+</body>
+</html>
