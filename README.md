@@ -9,6 +9,7 @@ This repository is organized by topics and technologies, making it easy to quick
 ### [CSS](./css/)
 Styling and layout techniques for modern web development:
 - **[Layout & Styling Guide](./css/layout-styling.md)** - Comprehensive guide to CSS layout patterns, including flexbox vs grid, responsive design, common layouts (navbar, sidebar, two-column), height/overflow management, and best practices
+- **[Fonts & Typography Guide](./css/fonts.md)** - Complete guide to web typography, covering font loading, optimization, responsive text, accessibility, and best practices for modern font implementation
 
 ### [Service Worker](./service-worker/)
 Web service worker concepts and implementation strategies:
